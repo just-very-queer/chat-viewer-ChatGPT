@@ -258,10 +258,10 @@
     </div>
 
     <!-- Main Application Container -->
-    <div class="flex h-screen p-4 gap-4">
+    <div class="relative h-screen overflow-hidden">
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-64 md:w-80 flex-shrink-0 flex flex-col glass transition-all">
+        <aside id="sidebar" class="absolute z-30 h-full w-80 flex-shrink-0 flex flex-col glass transition-transform -translate-x-full md:translate-x-0">
             <div class="p-4 flex flex-col h-full">
                 <header class="mb-4 flex justify-between items-center">
                     <div>
@@ -316,7 +316,10 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main id="main-content" class="flex-1 flex flex-col overflow-y-hidden glass">
+        <main id="main-content" class="h-full flex flex-col overflow-y-hidden glass md:ml-80 p-4">
+            <button id="menu-toggle" class="md:hidden absolute top-2 left-2 z-30 p-2 text-inherit hover:bg-white/10 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
             <div id="welcome-screen" class="flex flex-col items-center justify-center h-full text-center p-4 transition-all">
                 <div class="p-8 rounded-2xl max-w-lg w-full">
                     <h2 class="text-2xl font-bold text-inherit">Universal Chat Archive</h2>
@@ -473,6 +476,20 @@
                     handleFileSelect(file); // Pass the file object directly
                 });
             }
+
+            // Mobile sidebar toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('-translate-x-full');
+            });
+            // Also close sidebar if a conversation is clicked
+            sidebar.addEventListener('click', (e) => {
+                if (e.target.closest('a')) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
         });
 
         // --- EVENT LISTENERS ---
